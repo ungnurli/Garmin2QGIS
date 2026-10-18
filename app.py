@@ -262,6 +262,18 @@ def insert_trackpoints(conn, activity_id, points):
     conn.commit()
 
 
+def activity_exists(conn, source_file, start_time):
+    """Prüft, ob die Aktivität (Dateiname + Startzeit) schon importiert wurde."""
+    with conn.cursor() as cur:
+        cur.execute("""
+            SELECT 1 FROM garmin_activities
+            WHERE source_file = %s
+              AND start_time IS NOT DISTINCT FROM %s
+            LIMIT 1
+        """, (source_file, start_time))
+        return cur.fetchone() is not None
+
+
 def fit_to_postgres(fit_path, conn, log):
     fit_file = FitFile(fit_path)
     source_file = os.path.basename(fit_path)
@@ -271,6 +283,10 @@ def fit_to_postgres(fit_path, conn, log):
 
     if not points:
         log(f"  ⚠ Keine GPS-Punkte: {source_file}")
+        return
+
+    if activity_exists(conn, source_file, session.get("start_time")):
+        log(f"  ↷ Übersprungen (bereits importiert): {source_file}")
         return
 
     activity_id = insert_activity(conn, source_file, session)
