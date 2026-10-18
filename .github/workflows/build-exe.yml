@@ -1,0 +1,54 @@
+name: Build app.exe
+
+on:
+  push:
+    branches: [prod, main]
+    paths:
+      - app.py
+      - app.spec
+      - requirements.txt
+      - .github/workflows/build-exe.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Build with PyInstaller
+        run: pyinstaller app.spec --noconfirm
+
+      - name: Upload exe as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-exe
+          path: dist/app.exe
+
+      # Die frisch gebaute exe zurück ins Repo committen, damit app.exe und
+      # dist/app.exe immer zum aktuellen app.py passen.
+      # [skip ci] verhindert, dass der Commit den Workflow erneut auslöst.
+      - name: Commit built exe
+        shell: bash
+        run: |
+          cp dist/app.exe app.exe
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f app.exe dist/app.exe
+          if git diff --cached --quiet; then
+            echo "exe unverändert, nichts zu committen"
+          else
+            git commit -m "Build app.exe [skip ci]"
+            git push
+          fi

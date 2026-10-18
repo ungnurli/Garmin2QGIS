@@ -1,0 +1,3 @@
+fitparse
+psycopg2-binary
+pyinstaller
