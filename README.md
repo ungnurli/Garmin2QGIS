@@ -45,7 +45,7 @@ für QGIS.
 | Datenbank | PostgreSQL mit der Erweiterung **PostGIS**, vom Rechner aus erreichbar |
 | DB-Zugang | Benutzer mit Recht, Tabellen und Views anzulegen (im gewünschten Schema) |
 | Betriebssystem | Windows für die fertige `app.exe`; mit Python läuft `app.py` auch unter anderen Systemen |
-| Python (nur ohne exe) | Python 3 mit Tkinter, dazu `fitparse` und `psycopg2-binary` (siehe `requirements.txt`) |
+| Python (nur ohne exe) | Python 3 mit Tkinter, dazu `fitdecode` und `psycopg2-binary` (siehe `requirements.txt`) |
 | QGIS | beliebige aktuelle Version mit PostgreSQL-Anbindung |
 
 ## Schnellstart
@@ -60,7 +60,7 @@ für QGIS.
 **Variante B: mit Python**
 
 ```bash
-pip install fitparse psycopg2-binary
+pip install fitdecode psycopg2-binary
 python app.py
 ```
 

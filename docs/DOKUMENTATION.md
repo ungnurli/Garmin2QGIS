@@ -29,7 +29,7 @@ liest und in PostgreSQL/PostGIS schreibt. QGIS greift anschließend direkt auf d
  Garmin-Gerät / Garmin Connect
           │  Export (ZIP mit .fit)
           ▼
- ┌───────────────────────┐      fitparse       ┌─────────────────────┐
+ ┌───────────────────────┐     fitdecode       ┌─────────────────────┐
  │ Quellordner mit .zip  │ ──────────────────► │ app.py / app.exe    │
  └───────────────────────┘   entpacken, lesen  │ (Tkinter-GUI)       │
                                                 └──────────┬──────────┘
@@ -52,7 +52,7 @@ liest und in PostgreSQL/PostGIS schreibt. QGIS greift anschließend direkt auf d
 
 | Bibliothek | Zweck |
 |---|---|
-| `fitparse` | Liest das binäre Garmin-FIT-Format |
+| `fitdecode` | Liest das binäre Garmin-FIT-Format (reines Python, ersetzt das frühere `fitparse`) |
 | `psycopg2` | Verbindung zu PostgreSQL, Massen-Insert mit `execute_values` |
 | `tkinter` | Grafische Oberfläche (Teil der Python-Standardbibliothek) |
 | `zipfile`, `tempfile`, `os` | Entpacken und Durchsuchen der Quellordner |
